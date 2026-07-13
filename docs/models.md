@@ -18,6 +18,11 @@ RetinaFace models are trained on the [WIDER FACE](datasets.md#wider-face) datase
 | `MNET_V2` :material-check-circle: | 3.2M   | 3.5MB | 91.70% | 91.03% | 86.60% |
 | `RESNET18`   | 11.7M  | 27MB  | 92.50% | 91.02% | 86.63% |
 | `RESNET34`   | 24.8M  | 56MB  | 94.16% | 93.12% | 88.90% |
+| `RESNET50`   | 27.4M  | 104MB | 94.72%* | 93.67%* | 88.82%* |
+
+*\* `RESNET50` weights come from [HivisionIDPhotos](https://huggingface.co/TheEeeeLin/HivisionIDPhotos_matting/blob/main/retinaface-resnet50.onnx);
+its scores are measured with [widerface_evaluation](https://github.com/yakhyo/widerface_evaluation) rather than quoted
+from the paper. It trails `RESNET34` on Hard despite being ~2x the size.*
 
 !!! info "Accuracy & Benchmarks"
     **Accuracy**: WIDER FACE validation set (Easy/Medium/Hard subsets) - from [RetinaFace paper](https://arxiv.org/abs/1905.00641)

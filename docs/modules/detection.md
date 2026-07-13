@@ -64,6 +64,10 @@ detector = RetinaFace(model_name=RetinaFaceWeights.RESNET34)
 | **MNET_V2** :material-check-circle: | 3.2M | 3.5 MB | 91.7% | 91.0% | 86.6% |
 | RESNET18 | 11.7M | 27 MB | 92.5% | 91.0% | 86.6% |
 | RESNET34 | 24.8M | 56 MB | 94.2% | 93.1% | 88.9% |
+| RESNET50 | 27.4M | 104 MB | 94.7%* | 93.7%* | 88.8%* |
+
+*\* `RESNET50` weights come from [HivisionIDPhotos](https://huggingface.co/TheEeeeLin/HivisionIDPhotos_matting/blob/main/retinaface-resnet50.onnx);
+its scores are measured, not quoted from the paper. See [Models](../models.md#retinaface-family).*
 
 ### Configuration
 
