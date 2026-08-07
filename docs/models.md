@@ -64,8 +64,10 @@ CenterFace is an anchor-free detector (MobileNetV2 + FPN) that treats faces as c
     **Speed**: Benchmark on your own hardware using `python tools/detect.py --source <image> --method centerface`
 
 !!! note "Input Size"
-    Input width and height must be multiples of 32 (default 640×640). The ONNX model
-    supports dynamic batch and spatial dimensions.
+    The ONNX model has dynamic spatial dimensions. `input_size` is an upper bound
+    (default 640×640), not a fixed shape: larger images are scaled down to fit and smaller
+    ones are left alone, preserving aspect ratio. Each side is then rounded up to a
+    multiple of 32. Pass `input_size=None` to always run at native resolution, like upstream.
 
 ---
 

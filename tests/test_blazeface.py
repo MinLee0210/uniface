@@ -68,15 +68,30 @@ def test_first_two_keypoints_are_the_eyes(blazeface_model, face_image):
     assert face.landmarks[0][0] < face.landmarks[1][0]
 
 
-def test_bbox_is_clipped_to_the_frame(blazeface_model, face_image):
-    """Decoded boxes can run past the frame; detect() clips them."""
-    height, width = face_image.shape[:2]
-
+def test_bbox_is_well_formed(blazeface_model, face_image):
+    """Boxes are ordered and non-degenerate, but not clipped to the frame."""
     for face in blazeface_model.detect(face_image):
         x1, y1, x2, y2 = face.bbox
         assert x1 < x2 and y1 < y2
-        assert 0 <= x1 <= width and 0 <= x2 <= width
-        assert 0 <= y1 <= height and 0 <= y2 <= height
+
+
+def test_bbox_stays_square_when_the_face_runs_off_frame(blazeface_model, face_image):
+    """The box is left unclipped so FaceMesh's square-ROI rule still holds.
+
+    MediaPipe's `detection_to_roi` expands a *square* box by 1.5x. Clipping to the
+    frame breaks the squareness and shifts the centre, which drags the mesh off the
+    mouth on webcam close-ups — the exact case where the box overflows.
+    """
+    # Crop tight around the face so the decoded box overflows the frame.
+    frame = cv2.resize(face_image[400:870, 380:850], (640, 480))
+    height, width = frame.shape[:2]
+
+    faces = blazeface_model.detect(frame)
+    assert faces, 'expected a detection on the close-up crop'
+
+    x1, y1, x2, y2 = faces[0].bbox
+    assert x1 < 0 or y1 < 0 or x2 > width or y2 > height, 'crop is not tight enough to exercise overflow'
+    assert (y2 - y1) / (x2 - x1) == pytest.approx(1.0, abs=0.02)
 
 
 def test_no_faces_in_blank_images(blazeface_model):
